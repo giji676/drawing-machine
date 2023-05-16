@@ -209,7 +209,7 @@ if __name__ == '__main__':     # Program entrance
         print("Vertex", index, "/", str(len(imgs)))
         while True:
             try:
-                values = calculate(img, max_x, min_y, False)
+                values = calculate(img, max_x, min_y, True)
                 m1 = [values[0][0], values[1][0], values[2][0]]
                 m2 = [values[0][1], values[1][1], values[2][1]]
 
