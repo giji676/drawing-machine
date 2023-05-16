@@ -78,8 +78,8 @@ def calculate(img, max_x, min_y, debug):
     remapX = remap(img[0], 0, max_x, 0, canvas_size[0])
     remapY = remap(img[1], 0, min_y, 0, canvas_size[1])
     
-    targetX = remapX + top_left_offset[0] # - xy_offset_overtime_current
-    targetY = remapY + top_left_offset[1] # - xy_offset_overtime_current
+    targetX = remapX + top_left_offset[0]
+    targetY = remapY + top_left_offset[1]
     
     newLl = (math.sqrt((targetX)**2+targetY**2)/step_mm_conversion[0]*step_mm_conversion[1])
     newLr = (math.sqrt((distance_between_motors-targetX)**2+targetY**2)/step_mm_conversion[0]*step_mm_conversion[1])
@@ -87,8 +87,6 @@ def calculate(img, max_x, min_y, debug):
     
     distLl = int(lllr[0]-newLl)
     distLr = int(lllr[1]-newLr)
-    if debug:
-        print(lllr, (targetX,targetY), (newLl, newLr), (distLl, distLr))
     
     lllr[0] = newLl
     lllr[1] = newLr
@@ -123,6 +121,10 @@ def calculate(img, max_x, min_y, debug):
     directionLlLr = [dirLl, dirLr]
     speedLlLr = [speedLl, speedLr]
     distanceLlLr = [distLl, distLr]
+
+    if debug:
+        print(lllr, (targetX,targetY), (newLl, newLr), (distLl, distLr))
+        print(directionLlLr, speedLlLr, distanceLlLr)
     
     return directionLlLr, speedLlLr, distanceLlLr
 
@@ -160,9 +162,6 @@ if __name__ == '__main__':     # Program entrance
     min_y = max(row[1] for row in imgs)
     
     index = 0
-    xy_offset_overtime_increment = 10/7000
-    xy_offset_overtime_max = xy_offset_overtime_increment*len(imgs)
-    xy_offset_overtime_current = 0
     pen_setup = True
     while pen_setup:
         if not(GPIO.input(btns[1])) and not(GPIO.input(btns[2])):
@@ -204,7 +203,6 @@ if __name__ == '__main__':     # Program entrance
         GPIO.output(leds[2], GPIO.HIGH)
         GPIO.output(leds[0], GPIO.LOW)
         GPIO.output(leds[1], GPIO.LOW)
-        xy_offset_overtime_current += xy_offset_overtime_increment
         index += 1
         print("Vertex", index, "/", str(len(imgs)))
         while True:
